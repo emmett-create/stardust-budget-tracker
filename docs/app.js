@@ -85,8 +85,10 @@
       const cp = sum(rows.filter(r => r.category === cat && r.entry_type === 'planned'));
       setText(`cat-${cat}-actual`,  fmt(ca));
       setText(`cat-${cat}-planned`, cp > 0 ? '+ ' + fmt(cp) + ' planned' : '');
-      const pct = Math.min((ca + cp) / camp.budget * 100, 100);
-      setStyle(`cat-${cat}-bar`, 'width', pct + '%');
+      const aPct = Math.min(ca / camp.budget * 100, 100);
+      const pPct = Math.min(cp / camp.budget * 100, 100 - aPct);
+      setStyle(`cat-${cat}-actual-bar`,  'width', aPct + '%');
+      setStyle(`cat-${cat}-planned-bar`, 'width', pPct + '%');
     }                                                                                                                                                                                                       
   }
                                                                                                                                                                                                             

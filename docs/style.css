@@ -251,15 +251,16 @@
   .row-variance.under { color: #3fb950; }                                                                                                                                                                   
   .row-variance.over  { color: #f85149; } 
                                                                                                                                                                                                             
-  .cc-bar-wrap {                                                                                                                                                                                            
-    height: 4px; background: #21262d;     
-    border-radius: 2px; overflow: hidden;                                                                                                                                                                   
-    margin: 8px 0 6px;                                                                                                                                                                                      
-  }                                           
-  .cc-bar-fill {                                                                                                                                                                                            
-    height: 100%; background: #3fb950;                      
-    border-radius: 2px; transition: width 0.5s ease;                                                                                                                                                        
-  }                                           
+  .cc-bar-wrap {
+    height: 4px; background: #21262d;
+    border-radius: 2px; overflow: hidden;
+    margin: 8px 0 6px; display: flex;
+  }
+  .cc-bar-fill {
+    height: 100%; transition: width 0.5s ease;
+  }
+  .cc-bar-fill.actual  { background: #3fb950; }
+  .cc-bar-fill.planned { background: #58a6ff; }                                           
                                                                                                                                                                                                             
   /* ── Calendar ── */                                      
   .cal-nav-row {                                                                                                                                                                                            
