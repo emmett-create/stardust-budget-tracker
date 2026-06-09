@@ -1,9 +1,13 @@
-// Stardust Budget Tracker                                                                                                                                                                                
-                                                                                                                                                                                                            
-  const TOTAL_BUDGET = 10_000;                                                                                                                                                                              
-  const CATS = {                                                                                                                                                                                            
-    a8_paid: 'A8 Paid Influencers',                                                                                                                                                                         
-  };                                                                                                                                                                                                        
+// Stardust Budget Tracker
+
+  const TOTAL_BUDGET = 59_500;
+  const CAMPAIGNS = {
+    nye:            { label: 'NYE',             budget: 24_000 },
+    february:       { label: 'February',        budget: 15_500 },
+    womens_history: { label: "Women's History", budget: 10_000 },
+    tarot:          { label: 'Tarot',           budget: 10_000 },
+  };
+  const CATS = Object.fromEntries(Object.entries(CAMPAIGNS).map(([k, v]) => [k, v.label]));                                                                                                                                                                                                        
                                                                                                                                                                                                             
   const API = `${SUPABASE_URL}/rest/v1/stardust_budget_entries`;
   const SB  = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' };                                                                                    
@@ -76,13 +80,13 @@
     setStyle('progress-actual',  'width', aPct + '%');                                                                                                                                                      
     setStyle('progress-planned', 'width', pPct + '%');                                                                                                                                                      
                                                                                                                                                                                                             
-    for (const cat of Object.keys(CATS)) {                                                                                                                                                                  
-      const ca = sum(rows.filter(r => r.category === cat && r.entry_type === 'actual'));                                                                                                                    
+    for (const [cat, camp] of Object.entries(CAMPAIGNS)) {
+      const ca = sum(rows.filter(r => r.category === cat && r.entry_type === 'actual'));
       const cp = sum(rows.filter(r => r.category === cat && r.entry_type === 'planned'));
-      setText(`cat-${cat}-actual`,  fmt(ca));                                                                                                                                                               
+      setText(`cat-${cat}-actual`,  fmt(ca));
       setText(`cat-${cat}-planned`, cp > 0 ? '+ ' + fmt(cp) + ' planned' : '');
-      const pct = (ca + cp) > 0 ? Math.round(ca / (ca + cp) * 100) : 0;                                                                                                                                     
-      setStyle(`cat-${cat}-bar`, 'width', pct + '%');       
+      const pct = Math.min((ca + cp) / camp.budget * 100, 100);
+      setStyle(`cat-${cat}-bar`, 'width', pct + '%');
     }                                                                                                                                                                                                       
   }
                                                                                                                                                                                                             
@@ -265,7 +269,7 @@
       const payload = {                       
         date:           document.getElementById('f-date').value,                                                                                                                                            
         entry_type:     document.getElementById('f-type').value,
-        category:       'a8_paid',                                                                                                                                                                          
+        category:       document.getElementById('f-campaign').value,                                                                                                                                                                          
         creator_handle: document.getElementById('f-handle').value.trim().replace(/^@/, '') || null,
         description:    document.getElementById('f-description').value.trim() || null,                                                                                                                      
         amount:         parseFloat(document.getElementById('f-amount').value),                                                                                                                              
@@ -414,6 +418,7 @@
     document.getElementById('entry-form').reset();                                                                                                                                                          
     document.getElementById('f-date').value        = entry.date;
     document.getElementById('f-type').value        = entry.entry_type;
+    document.getElementById('f-campaign').value    = entry.category || 'nye';
     document.getElementById('f-handle').value      = entry.creator_handle || '';                                                                                                                            
     document.getElementById('f-description').value = entry.description || '';
     document.getElementById('f-amount').value      = entry.amount;                                                                                                                                          
