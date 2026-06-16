@@ -87,8 +87,12 @@
   .cat-card.february      { border-left-color: #f472b6; }
   .cat-card.womens_history{ border-left-color: #c084fc; }
   .cat-card.tarot         { border-left-color: #2dd4bf; }
+  .cat-card.horoscope     { border-left-color: #38bdf8; }
   .cat-grid-4 { grid-template-columns: repeat(4, 1fr); }
   @media (max-width: 900px) { .cat-grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  .cat-grid-5 { grid-template-columns: repeat(5, 1fr); }
+  @media (max-width: 1000px) { .cat-grid-5 { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 680px)  { .cat-grid-5 { grid-template-columns: repeat(2, 1fr); } }
   .cc-budget { font-size: 12px; color: #8b949e; margin-bottom: 8px; }                                                                                                                                                            
   .cat-card.mg   { border-left-color: #60a5fa; }            
   .cat-card.ship { border-left-color: #fb923c; }                                                                                                                                                            
@@ -211,7 +215,8 @@
   .badge-cat.nye            { background: #2d1f00; color: #f59e0b; }
   .badge-cat.february       { background: #2d0f1e; color: #f472b6; }
   .badge-cat.womens_history { background: #1e0f2d; color: #c084fc; }
-  .badge-cat.tarot          { background: #0f2d2a; color: #2dd4bf; }                                                                                                                                         
+  .badge-cat.tarot          { background: #0f2d2a; color: #2dd4bf; }
+  .badge-cat.horoscope      { background: #0c2233; color: #38bdf8; }                                                                                                                                         
                                           
   .handle-text { font-family: monospace; font-size: 11px; color: #8b949e; margin-right: 4px; }                                                                                                              
   .amount-actual  { font-weight: 600; }                                                                                                                                                                     
@@ -315,7 +320,8 @@
   .cal-dot.nye            { background: #2d1f00; color: #f59e0b; }
   .cal-dot.february       { background: #2d0f1e; color: #f472b6; }
   .cal-dot.womens_history { background: #1e0f2d; color: #c084fc; }
-  .cal-dot.tarot          { background: #0f2d2a; color: #2dd4bf; }                                                                                                                                           
+  .cal-dot.tarot          { background: #0f2d2a; color: #2dd4bf; }
+  .cal-dot.horoscope      { background: #0c2233; color: #38bdf8; }                                                                                                                                           
   .cal-dot.cal-dot-plan  { opacity: 0.55; }
                                                                                                                                                                                                             
   .cal-detail {                                                                                                                                                                                             
