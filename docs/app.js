@@ -1,12 +1,13 @@
 // Stardust Budget Tracker
 
-  const TOTAL_BUDGET = 69_500;
+  const TOTAL_BUDGET = 95_000;
   const CAMPAIGNS = {
-    nye:            { label: 'NYE',             budget: 24_000 },
-    february:       { label: 'February',        budget: 15_500 },
-    womens_history: { label: "Women's History", budget: 10_000 },
-    tarot:          { label: 'Tarot',           budget: 10_000 },
-    horoscope:      { label: 'Horoscope',       budget: 10_000 },
+    nye:              { label: 'NYE',              budget: 24_000 },
+    february:         { label: 'February',         budget: 21_000 },
+    womens_history:   { label: "Women's History",  budget: 10_000 },
+    tarot:            { label: 'Tarot',             budget: 10_000 },
+    horoscope:        { label: 'Horoscope',         budget: 10_000 },
+    macro_partner_aug:{ label: 'Macro Partner Aug', budget: 20_000 },
   };
   const CATS = Object.fromEntries(Object.entries(CAMPAIGNS).map(([k, v]) => [k, v.label]));                                                                                                                                                                                                        
                                                                                                                                                                                                             

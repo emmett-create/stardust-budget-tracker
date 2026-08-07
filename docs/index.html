@@ -26,9 +26,9 @@
         <div class="budget-top">
           <div>                                                                                                                                                                                             
             <span class="budget-num" id="total-spent">$0</span>
-            <span class="budget-of">spent of $69,500</span>
+            <span class="budget-of">spent of $95,000</span>
           </div>
-          <span class="budget-rem" id="total-remaining">$69,500 remaining</span>
+          <span class="budget-rem" id="total-remaining">$95,000 remaining</span>
         </div>                                                                                                                                                                                              
         <div class="progress-track">                                                                                                                                                                        
           <div class="progress-fill actual"  id="progress-actual"  style="width:0%"></div>                                                                                                                  
@@ -48,7 +48,7 @@
       </div>
 
       <!-- Campaign cards -->
-      <div class="cat-grid cat-grid-5">
+      <div class="cat-grid cat-grid-6">
         <div class="cat-card nye" id="cc-nye" data-cat="nye">
           <div class="cc-label">NYE</div>
           <div class="cc-num" id="cat-nye-actual">$0</div>
@@ -63,7 +63,7 @@
         <div class="cat-card february" id="cc-february" data-cat="february">
           <div class="cc-label">February</div>
           <div class="cc-num" id="cat-february-actual">$0</div>
-          <div class="cc-budget">of $15,500</div>
+          <div class="cc-budget">of $21,000</div>
           <div class="cc-bar-wrap">
             <div class="cc-bar-fill actual"  id="cat-february-actual-bar"  style="width:0%"></div>
             <div class="cc-bar-fill planned" id="cat-february-planned-bar" style="width:0%"></div>
@@ -104,7 +104,18 @@
           <div class="cc-plan" id="cat-horoscope-planned"></div>
           <div class="cc-hint">Click to filter</div>
         </div>
-      </div>                                                                                                                                                                                                
+        <div class="cat-card macro_partner_aug" id="cc-macro_partner_aug" data-cat="macro_partner_aug">
+          <div class="cc-label">Macro Partner Aug</div>
+          <div class="cc-num" id="cat-macro_partner_aug-actual">$0</div>
+          <div class="cc-budget">of $20,000</div>
+          <div class="cc-bar-wrap">
+            <div class="cc-bar-fill actual"  id="cat-macro_partner_aug-actual-bar"  style="width:0%"></div>
+            <div class="cc-bar-fill planned" id="cat-macro_partner_aug-planned-bar" style="width:0%"></div>
+          </div>
+          <div class="cc-plan" id="cat-macro_partner_aug-planned"></div>
+          <div class="cc-hint">Click to filter</div>
+        </div>
+      </div>                                                                                                                                                                                              
                                                                                                                                                                                                             
       <!-- Active filter banner -->                                                                                                                                                                         
       <div class="filter-banner hidden" id="filter-banner"> 
@@ -161,6 +172,7 @@
           <span class="cal-dot womens_history">Women's History</span>
           <span class="cal-dot tarot">Tarot</span>
           <span class="cal-dot horoscope">Horoscope</span>
+          <span class="cal-dot macro_partner_aug">Macro Partner Aug</span>
           <span class="cal-key-dim">Dimmed = planned only</span>                                                                                                                                            
         </div>                                                                                                                                                                                              
         <div class="cal-dow-row">                           
@@ -213,6 +225,7 @@
               <option value="womens_history">Women's History</option>
               <option value="tarot">Tarot</option>
               <option value="horoscope">Horoscope</option>
+              <option value="macro_partner_aug">Macro Partner Aug</option>
             </select>
           </div>
           <div class="fld" id="field-handle">
