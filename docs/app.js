@@ -1,10 +1,10 @@
 // Stardust Budget Tracker
 
-  const TOTAL_BUDGET = 95_000;
+  const TOTAL_BUDGET = 96_000;
   const CAMPAIGNS = {
     nye:              { label: 'NYE',              budget: 24_000 },
-    february:         { label: 'February',         budget: 21_000 },
-    womens_history:   { label: "Women's History",  budget: 10_000 },
+    february:         { label: 'February',         budget: 20_000 },
+    womens_history:   { label: "Women's History",  budget: 12_000 },
     tarot:            { label: 'Tarot',             budget: 10_000 },
     horoscope:        { label: 'Horoscope',         budget: 10_000 },
     macro_partner_aug:{ label: 'Macro Partner Aug', budget: 20_000 },
