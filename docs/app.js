@@ -23,8 +23,38 @@
     canceled:       'Canceled',
   };
 
-  const API = `${SUPABASE_URL}/rest/v1/stardust_budget_entries`;
-  const SB  = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' };
+  // Direct anon-key access to this table was closed off 2026-10-07 (Supabase
+  // flagged it as "publicly accessible" — RLS was never enabled, so anyone
+  // with this file's public SUPABASE_KEY above could read/write/delete every
+  // row with no password at all). All CRUD now goes through the bridge
+  // instead, which holds the service_role key server-side and checks a
+  // password first — same password prompt pattern the Lumanu/invoice actions
+  // below already use, just asked once per browser session instead of on
+  // every single action.
+  const BRIDGE_API  = 'https://budget-tracker-lumanu-bridge.onrender.com';
+  const CLIENT_KEY  = 'stardust';   // must match the key in the bridge's config.py CLIENTS dict
+  const ENTRIES_API = `${BRIDGE_API}/api/budget_entries/${CLIENT_KEY}`;
+
+  function getPw() {
+    let pw = sessionStorage.getItem('sd_pw');
+    if (!pw) {
+      pw = prompt('Enter the team password to access the budget tracker:');
+      if (pw) sessionStorage.setItem('sd_pw', pw);
+    }
+    return pw;
+  }
+
+  async function pwFetch(url, opts = {}) {
+    const pw = getPw();
+    if (!pw) return null;
+    const r = await fetch(url, { ...opts, headers: { ...(opts.headers || {}), 'X-Bridge-Secret': pw } });
+    if (r.status === 401) {
+      sessionStorage.removeItem('sd_pw');
+      alert('Wrong password — please try again.');
+      return pwFetch(url, opts);
+    }
+    return r;
+  }
 
   let rows       = [];
   let typeFilter = 'all';
@@ -48,34 +78,34 @@
 
   // ── Data ──────────────────────────────────────────────────────────────────────
   async function load() {
-    const r = await fetch(`${API}?order=date.desc,created_at.desc`, { headers: SB });
-    const all = r.ok ? await r.json() : [];
+    const r = await pwFetch(`${ENTRIES_API}`);
+    const all = r && r.ok ? await r.json() : [];
     pending = all.filter(x => x.status === 'pending');   // inbox
     rows    = all.filter(x => x.status !== 'pending');   // everything else (totals/table/calendar)
     render();
   }
 
   async function insert(entry) {
-    const r = await fetch(API, {
+    const r = await pwFetch(ENTRIES_API, {
       method: 'POST',
-      headers: { ...SB, 'Prefer': 'return=minimal' },
-      body: JSON.stringify(entry),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: entry }),
     });
-    return r.ok;
+    return !!r && r.ok;
   }
 
   async function remove(id) {
-    const r = await fetch(`${API}?id=eq.${id}`, { method: 'DELETE', headers: SB });
-    return r.ok;
+    const r = await pwFetch(`${ENTRIES_API}/${id}`, { method: 'DELETE' });
+    return !!r && r.ok;
   }
 
   async function update(id, data) {
-    const r = await fetch(`${API}?id=eq.${id}`, {
+    const r = await pwFetch(`${ENTRIES_API}/${id}`, {
       method: 'PATCH',
-      headers: { ...SB, 'Prefer': 'return=minimal' },
-      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data }),
     });
-    return r.ok;
+    return !!r && r.ok;
   }
 
   // ── Render ────────────────────────────────────────────────────────────────────
@@ -315,8 +345,8 @@
   }
 
   // ── Lumanu send (direct API, via the shared budget-tracker-lumanu-bridge service) ──
-  const BRIDGE_API = 'https://budget-tracker-lumanu-bridge.onrender.com';
-  const CLIENT_KEY = 'stardust';   // must match the key in the bridge's config.py CLIENTS dict
+  // BRIDGE_API / CLIENT_KEY are declared up near the top of this file now,
+  // alongside the CRUD proxy that also needs them.
 
   function updateExportBar() {
     const bar = document.getElementById('lumanu-export-bar');
@@ -335,7 +365,7 @@
       return;
     }
 
-    const pw = prompt('Enter the password to send to Lumanu:');
+    const pw = getPw();
     if (!pw) return;
 
     const btn = document.getElementById('btn-export-lumanu');
@@ -346,7 +376,7 @@
         headers: { 'Content-Type': 'application/json', 'X-Bridge-Secret': pw },
         body: JSON.stringify({ entry_ids: chosenIds }),
       });
-      if (r.status === 401) { alert('Wrong password.'); return; }
+      if (r.status === 401) { sessionStorage.removeItem('sd_pw'); alert('Wrong password — please try again.'); return; }
       const { results } = await r.json();
       const okCount = results.filter(x => x.ok).length;
       const failed  = results.filter(x => !x.ok);
@@ -372,7 +402,7 @@
       if (!file) return;
       if (file.type !== 'application/pdf') { alert('Please choose a PDF file.'); return; }
 
-      const pw = prompt('Enter the password to attach this invoice:');
+      const pw = getPw();
       if (!pw) return;
 
       try {
@@ -383,7 +413,7 @@
           headers: { 'X-Bridge-Secret': pw },
           body: form,
         });
-        if (r.status === 401) { alert('Wrong password.'); return; }
+        if (r.status === 401) { sessionStorage.removeItem('sd_pw'); alert('Wrong password — please try again.'); return; }
         if (!r.ok) { alert('Upload failed — please try again.'); return; }
         await load();
       } catch (e) {
@@ -394,13 +424,13 @@
   }
 
   async function viewInvoice(entryId) {
-    const pw = prompt('Enter the password to view this invoice:');
+    const pw = getPw();
     if (!pw) return;
     try {
       const r = await fetch(`${BRIDGE_API}/api/invoice/url/${CLIENT_KEY}/${entryId}`, {
         headers: { 'X-Bridge-Secret': pw },
       });
-      if (r.status === 401) { alert('Wrong password.'); return; }
+      if (r.status === 401) { sessionStorage.removeItem('sd_pw'); alert('Wrong password — please try again.'); return; }
       if (!r.ok) { alert('Could not load invoice.'); return; }
       const { url } = await r.json();
       window.open(url, '_blank');
