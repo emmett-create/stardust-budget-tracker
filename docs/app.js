@@ -1,6 +1,6 @@
 // Stardust Budget Tracker
 
-  const TOTAL_BUDGET = 96_000;
+  const TOTAL_BUDGET = 132_000;
   const CAMPAIGNS = {
     nye:              { label: 'NYE',              budget: 24_000 },
     february:         { label: 'February',         budget: 20_000 },
@@ -8,6 +8,12 @@
     tarot:            { label: 'Tarot',             budget: 10_000 },
     horoscope:        { label: 'Horoscope',         budget: 10_000 },
     macro_partner_aug:{ label: 'Macro Partner Aug', budget: 20_000 },
+    // Rollover chain (2026-11-25, Olivia): unspent budget from one month
+    // carries into the next month's effective budget — see the `carry`
+    // pass in renderSummary(). Order here IS the rollover order.
+    october:          { label: 'October',           budget: 12_000, rollover: true },
+    november:         { label: 'November',          budget: 12_000, rollover: true },
+    december:         { label: 'December',          budget: 12_000, rollover: true },
   };
   const CATS = Object.fromEntries(Object.entries(CAMPAIGNS).map(([k, v]) => [k, v.label]));
   // Lumanu inbox added 2026-09-30 (see budget-tracker-lumanu-bridge). Every
@@ -114,13 +120,30 @@
     if (ppEl) ppEl.dataset.tooltip = tPlan > 0 ? fmt(tPlan) + ' planned' : '';
     setText('legend-planned-amt', tPlan > 0 ? '(' + fmt(tPlan) + ')' : '');
 
+    // Rollover: walking through CAMPAIGNS in order, a `rollover: true`
+    // campaign's effective budget is its own base budget plus whatever was
+    // left unspent by the previous rollover campaign in the chain. A
+    // non-rollover campaign resets the carry to 0, so it never leaks into
+    // an unrelated campaign. This only reallocates the existing pool
+    // between months — it doesn't change TOTAL_BUDGET.
+    let carry = 0;
     for (const [cat, camp] of Object.entries(CAMPAIGNS)) {
       const ca = sum(rows.filter(r => r.category === cat && r.entry_type === 'actual'));
       const cp = sum(rows.filter(r => r.category === cat && r.entry_type === 'planned'));
       setText(`cat-${cat}-actual`,  fmt(ca));
       setText(`cat-${cat}-planned`, cp > 0 ? '+ ' + fmt(cp) + ' planned' : '');
-      const aPct = Math.min(ca / camp.budget * 100, 100);
-      const pPct = Math.min(cp / camp.budget * 100, 100 - aPct);
+
+      const effBudget = camp.rollover ? camp.budget + carry : camp.budget;
+      if (camp.rollover) {
+        setText(`cat-${cat}-budget`, 'of ' + fmt(effBudget) +
+          (carry > 0 ? ` (incl. ${fmt(carry)} rolled over)` : ''));
+        carry = Math.max(0, effBudget - ca);
+      } else {
+        carry = 0;
+      }
+
+      const aPct = Math.min(ca / effBudget * 100, 100);
+      const pPct = Math.min(cp / effBudget * 100, 100 - aPct);
       setStyle(`cat-${cat}-actual-bar`,  'width', aPct + '%');
       setStyle(`cat-${cat}-planned-bar`, 'width', pPct + '%');
     }

@@ -89,6 +89,9 @@
   .cat-card.tarot         { border-left-color: #2dd4bf; }
   .cat-card.horoscope     { border-left-color: #38bdf8; }
   .cat-card.macro_partner_aug { border-left-color: #34d399; }
+  .cat-card.october       { border-left-color: #f97316; }
+  .cat-card.november      { border-left-color: #84cc16; }
+  .cat-card.december      { border-left-color: #ef4444; }
   .cat-grid-4 { grid-template-columns: repeat(4, 1fr); }
   @media (max-width: 900px) { .cat-grid-4 { grid-template-columns: repeat(2, 1fr); } }
   .cat-grid-5 { grid-template-columns: repeat(5, 1fr); }
@@ -97,6 +100,8 @@
   .cat-grid-6 { grid-template-columns: repeat(6, 1fr); }
   @media (max-width: 1100px) { .cat-grid-6 { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 680px)  { .cat-grid-6 { grid-template-columns: repeat(2, 1fr); } }
+  .cat-grid-9 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 680px)  { .cat-grid-9 { grid-template-columns: repeat(2, 1fr); } }
   .cc-budget { font-size: 12px; color: #8b949e; margin-bottom: 8px; }                                                                                                                                                            
   .cat-card.mg   { border-left-color: #60a5fa; }            
   .cat-card.ship { border-left-color: #fb923c; }                                                                                                                                                            
@@ -221,7 +226,10 @@
   .badge-cat.womens_history { background: #1e0f2d; color: #c084fc; }
   .badge-cat.tarot          { background: #0f2d2a; color: #2dd4bf; }
   .badge-cat.horoscope      { background: #0c2233; color: #38bdf8; }
-  .badge-cat.macro_partner_aug { background: #0f2d22; color: #34d399; }                                                                                                                                         
+  .badge-cat.macro_partner_aug { background: #0f2d22; color: #34d399; }
+  .badge-cat.october        { background: #2d1a0a; color: #f97316; }
+  .badge-cat.november       { background: #1d2d0a; color: #84cc16; }
+  .badge-cat.december       { background: #2d0f0f; color: #ef4444; }                                                                                                                                         
                                           
   .handle-text { font-family: monospace; font-size: 11px; color: #8b949e; margin-right: 4px; }                                                                                                              
   .amount-actual  { font-weight: 600; }                                                                                                                                                                     
@@ -327,7 +335,10 @@
   .cal-dot.womens_history { background: #1e0f2d; color: #c084fc; }
   .cal-dot.tarot          { background: #0f2d2a; color: #2dd4bf; }
   .cal-dot.horoscope      { background: #0c2233; color: #38bdf8; }
-  .cal-dot.macro_partner_aug { background: #0f2d22; color: #34d399; }                                                                                                                                           
+  .cal-dot.macro_partner_aug { background: #0f2d22; color: #34d399; }
+  .cal-dot.october        { background: #2d1a0a; color: #f97316; }
+  .cal-dot.november       { background: #1d2d0a; color: #84cc16; }
+  .cal-dot.december       { background: #2d0f0f; color: #ef4444; }                                                                                                                                           
   .cal-dot.cal-dot-plan  { opacity: 0.55; }
                                                                                                                                                                                                             
   .cal-detail {                                                                                                                                                                                             
